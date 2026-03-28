@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
+  },
+  "scripts": {
+},
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
