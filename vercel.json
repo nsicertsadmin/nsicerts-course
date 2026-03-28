@@ -3,10 +3,3 @@
   "outputDirectory": "dist",
   "framework": "vite"
 }
-```
-
-Save it (Ctrl+S) and close Notepad. Then:
-```
-git add .
-git commit -m "fix vercel json"
-git push
