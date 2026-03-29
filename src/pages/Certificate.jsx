@@ -72,10 +72,14 @@ export default function Certificate() {
           #cert-printable {
             position: fixed !important;
             top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            margin: 0 !important; padding: 0 !important;
+            width: 100% !important;
+            margin: 0 !important; padding: 0.2in !important;
+            box-sizing: border-box !important;
           }
-          @page { size: landscape; margin: 0.3in; }
+          #cert-printable > div[style*="display: flex"][style*="gap: 0"] {
+            max-width: 80% !important;
+          }
+          @page { size: landscape; margin: 0.25in; }
         }
         @media screen {
           #cert-printable { max-width: 900px; margin: 0 auto; }
@@ -111,9 +115,14 @@ export default function Certificate() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '2rem', textAlign: 'center', fontFamily: 'sans-serif' }}>
-                {COURSE_STANDARDS[courseId]?.map(b => (
+                {COURSE_STANDARDS[courseId]?.map((b, i) => (
                   <div key={b.label}>
-                    <div style={{ fontWeight: 800, fontSize: '1.2rem', color: b.color, fontStyle: 'italic' }}>{b.label}</div>
+                    <div style={{
+                      fontWeight: 900, fontSize: '1.25rem', color: b.color,
+                      fontStyle: i === 2 ? 'normal' : 'italic',
+                      fontFamily: i === 0 ? '"Arial Black", Impact, sans-serif' : i === 1 ? '"Arial Black", Impact, sans-serif' : '"Times New Roman", Georgia, serif',
+                      letterSpacing: i === 2 ? '1px' : '0',
+                    }}>{b.label}</div>
                     <div style={{ fontSize: '0.6rem', color: '#555' }}>Compliant with {b.sub.split('&')[0]}</div>
                     {b.sub.includes('&') && <div style={{ fontSize: '0.6rem', color: '#555' }}>& {b.sub.split('&')[1]}</div>}
                   </div>
@@ -163,8 +172,15 @@ export default function Certificate() {
             <div style={{ borderTop: '1.5px solid #C9A84C', margin: '0.75rem 0 0.4rem' }} />
             <div style={{ fontSize: '0.65rem', color: '#888', fontFamily: 'sans-serif', marginBottom: '0.4rem' }}>✂  CUT AND FOLD gold section below for wallet</div>
 
-            {/* WALLET CARDS - flush together */}
-            <div style={{ display: 'flex', gap: 0 }}>
+            {/* WALLET CARDS - dashed border around entire section */}
+            <div style={{
+              display: 'flex', gap: 0,
+              border: '2px dashed #888',
+              borderRadius: 4,
+              overflow: 'hidden',
+              width: 'fit-content',
+              maxWidth: '85%',
+            }}>
 
               {/* LEFT WALLET CARD */}
               <div style={{
@@ -176,12 +192,22 @@ export default function Certificate() {
                 {/* Navy header */}
                 <div style={{ background: '#0A1F44', margin: '-0.5rem -0.6rem 0.4rem', padding: '0.25rem', textAlign: 'center', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div style={{ color: '#C9A84C', fontWeight: 700, fontSize: '0.75rem' }}>CERTIFIED MEWP OPERATOR</div>
-                  <div style={{ color: '#C9A84C', fontSize: '0.6rem', opacity: 0.8 }}>Aerial & Scissor Lifts</div>
                 </div>
 
-                {/* Student name auto-populated */}
-                <div style={{ fontWeight: 700, color: '#0A1F44', fontSize: '0.75rem', marginBottom: '0.1rem' }}>{fullName}</div>
-                <div style={{ borderBottom: '1px solid #0A1F44', marginBottom: '0.3rem' }} />
+                {/* NSI logo + student name */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: '50%', background: '#0A1F44',
+                    border: '2px solid #C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0, WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'
+                  }}>
+                    <span style={{ color: '#C9A84C', fontWeight: 700, fontSize: '0.6rem', fontFamily: 'sans-serif' }}>NSI</span>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 700, color: '#0A1F44', fontSize: '0.72rem', lineHeight: 1.1 }}>{fullName}</div>
+                    <div style={{ borderBottom: '1px solid #0A1F44', marginTop: '0.15rem' }} />
+                  </div>
+                </div>
 
                 {/* Body text */}
                 <div style={{ color: '#333', fontSize: '0.58rem', lineHeight: 1.4, marginBottom: '0.4rem' }}>
@@ -201,8 +227,8 @@ export default function Certificate() {
                 </div>
               </div>
 
-              {/* FOLD LINE */}
-              <div style={{ width: 0, borderLeft: '2px dashed #0A1F44' }} />
+              {/* FOLD LINE - solid thin line */}
+              <div style={{ width: 1, background: '#0A1F44', opacity: 0.3 }} />
 
               {/* RIGHT WALLET CARD */}
               <div style={{ flex: '0 0 50%', background: '#C9A84C', border: '3px solid #0A1F44', borderLeft: '1.5px solid #0A1F44', padding: '0.5rem 0.6rem', fontFamily: 'sans-serif', fontSize: '0.7rem', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
