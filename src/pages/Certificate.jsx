@@ -163,62 +163,51 @@ export default function Certificate() {
             <div style={{ borderTop: '1.5px solid #C9A84C', margin: '0.75rem 0 0.4rem' }} />
             <div style={{ fontSize: '0.65rem', color: '#888', fontFamily: 'sans-serif', marginBottom: '0.4rem' }}>✂  CUT AND FOLD gold section below for wallet</div>
 
-            {/* WALLET CARDS */}
-            <div style={{ display: 'flex', gap: 6 }}>
+            {/* WALLET CARDS - flush together */}
+            <div style={{ display: 'flex', gap: 0 }}>
 
               {/* LEFT WALLET CARD */}
-              <div style={{ flex: '0 0 48%', background: '#C9A84C', border: '3px solid #0A1F44', padding: '0.5rem 0.6rem', fontFamily: 'sans-serif', fontSize: '0.7rem', position: 'relative' }}>
-                {/* Header */}
-                <div style={{ background: '#0A1F44', margin: '-0.5rem -0.6rem 0.4rem', padding: '0.25rem', textAlign: 'center' }}>
+              <div style={{
+                flex: '0 0 50%', background: '#C9A84C',
+                border: '3px solid #0A1F44', borderRight: '1.5px solid #0A1F44',
+                padding: '0.5rem 0.6rem', fontFamily: 'sans-serif', fontSize: '0.7rem',
+                WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'
+              }}>
+                {/* Navy header */}
+                <div style={{ background: '#0A1F44', margin: '-0.5rem -0.6rem 0.4rem', padding: '0.25rem', textAlign: 'center', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div style={{ color: '#C9A84C', fontWeight: 700, fontSize: '0.75rem' }}>CERTIFIED MEWP OPERATOR</div>
-                  <div style={{ color: '#aaa', fontSize: '0.65rem' }}>Aerial & Scissor Lifts</div>
+                  <div style={{ color: '#C9A84C', fontSize: '0.6rem', opacity: 0.8 }}>Aerial & Scissor Lifts</div>
                 </div>
 
-                {/* Signature */}
-                <div style={{ textAlign: 'center', color: '#0A1F44', fontSize: '0.6rem', marginBottom: '0.2rem' }}>STUDENT SIGNATURE</div>
+                {/* Student name auto-populated */}
+                <div style={{ fontWeight: 700, color: '#0A1F44', fontSize: '0.75rem', marginBottom: '0.1rem' }}>{fullName}</div>
                 <div style={{ borderBottom: '1px solid #0A1F44', marginBottom: '0.3rem' }} />
 
                 {/* Body text */}
-                <div style={{ color: '#333', fontSize: '0.6rem', lineHeight: 1.4, marginBottom: '0.4rem' }}>
+                <div style={{ color: '#333', fontSize: '0.58rem', lineHeight: 1.4, marginBottom: '0.4rem' }}>
                   The above individual has fulfilled the practical evaluation and formal course required to be certified per OSHA 29 CFR 1926.453, ANSI/SAIA A92.22 & A92.24, and CAN/CSA-B354.6:17.
                 </div>
 
                 {/* Issue / Exp dates */}
-                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.1rem' }}>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ borderBottom: '1px solid #0A1F44', paddingBottom: '0.1rem', color: '#0A1F44', fontSize: '0.65rem' }}>{issuedDate}</div>
-                    <div style={{ fontSize: '0.55rem', color: '#0A1F44' }}>ISSUE DATE</div>
+                    <div style={{ borderBottom: '1px solid #0A1F44', paddingBottom: '0.1rem', color: '#0A1F44', fontSize: '0.62rem' }}>{issuedDate}</div>
+                    <div style={{ fontSize: '0.52rem', color: '#0A1F44' }}>ISSUE DATE</div>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ borderBottom: '1px solid #0A1F44', paddingBottom: '0.1rem', color: '#0A1F44', fontSize: '0.65rem' }}>{expiryDate}</div>
-                    <div style={{ fontSize: '0.55rem', color: '#0A1F44' }}>EXPIRATION DATE</div>
-                  </div>
-                </div>
-
-                {/* Practical exam */}
-                <div style={{ borderTop: '1px solid #0A1F44', marginTop: '0.4rem', paddingTop: '0.3rem' }}>
-                  <div style={{ fontWeight: 700, fontSize: '0.65rem', color: '#0A1F44', textAlign: 'center' }}>PRACTICAL EXAMINATION</div>
-                  <div style={{ fontSize: '0.55rem', color: '#444', textAlign: 'center', marginBottom: '0.3rem' }}>To be completed by evaluator</div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ borderBottom: '1px solid #0A1F44', marginBottom: '0.1rem', height: '0.9rem' }} />
-                      <div style={{ fontSize: '0.55rem', color: '#0A1F44' }}>DATE COMPLETED</div>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ borderBottom: '1px solid #0A1F44', marginBottom: '0.1rem', height: '0.9rem' }} />
-                      <div style={{ fontSize: '0.55rem', color: '#0A1F44' }}>EVALUATOR NAME</div>
-                    </div>
+                    <div style={{ borderBottom: '1px solid #0A1F44', paddingBottom: '0.1rem', color: '#0A1F44', fontSize: '0.62rem' }}>{expiryDate}</div>
+                    <div style={{ fontSize: '0.52rem', color: '#0A1F44' }}>EXPIRATION DATE</div>
                   </div>
                 </div>
               </div>
 
               {/* FOLD LINE */}
-              <div style={{ width: 4, borderLeft: '2px dashed #0A1F44', margin: '0 2px' }} />
+              <div style={{ width: 0, borderLeft: '2px dashed #0A1F44' }} />
 
               {/* RIGHT WALLET CARD */}
-              <div style={{ flex: '0 0 48%', background: '#C9A84C', border: '3px solid #0A1F44', padding: '0.5rem 0.6rem', fontFamily: 'sans-serif', fontSize: '0.7rem' }}>
+              <div style={{ flex: '0 0 50%', background: '#C9A84C', border: '3px solid #0A1F44', borderLeft: '1.5px solid #0A1F44', padding: '0.5rem 0.6rem', fontFamily: 'sans-serif', fontSize: '0.7rem', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                 {/* Header */}
-                <div style={{ background: '#0A1F44', margin: '-0.5rem -0.6rem 0.4rem', padding: '0.25rem', textAlign: 'center' }}>
+                <div style={{ background: '#0A1F44', margin: '-0.5rem -0.6rem 0.4rem', padding: '0.25rem', textAlign: 'center', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
                   <div style={{ color: '#C9A84C', fontWeight: 700, fontSize: '0.75rem' }}>CERTIFIED MEWP OPERATOR</div>
                 </div>
 
