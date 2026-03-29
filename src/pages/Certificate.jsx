@@ -60,7 +60,7 @@ export default function Certificate() {
   const expiryDate = formatDate(certData.expires_at)
   const certNum = certData.cert_number
   const verifyURL = `https://nsicerts.org/verify/${certNum}`
-  const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(verifyURL)}&color=0A1F44&bgcolor=C9A84C&margin=4`
+  const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(verifyURL)}&color=000000&bgcolor=ffffff&margin=4&ecc=M`
 
   return (
     <>
@@ -178,8 +178,8 @@ export default function Certificate() {
               border: '2px dashed #888',
               borderRadius: 4,
               overflow: 'hidden',
-              width: 'fit-content',
-              maxWidth: '85%',
+              width: '75%',
+              margin: '0 auto',
             }}>
 
               {/* LEFT WALLET CARD */}
@@ -197,11 +197,11 @@ export default function Certificate() {
                 {/* NSI logo + student name */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
                   <div style={{
-                    width: 36, height: 36, borderRadius: '50%', background: '#0A1F44',
-                    border: '2px solid #C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: 72, height: 72, borderRadius: '50%', background: '#0A1F44',
+                    border: '3px solid #C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0, WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'
                   }}>
-                    <span style={{ color: '#C9A84C', fontWeight: 700, fontSize: '0.6rem', fontFamily: 'sans-serif' }}>NSI</span>
+                    <span style={{ color: '#C9A84C', fontWeight: 700, fontSize: '1rem', fontFamily: 'sans-serif' }}>NSI</span>
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, color: '#0A1F44', fontSize: '0.72rem', lineHeight: 1.1 }}>{fullName}</div>
