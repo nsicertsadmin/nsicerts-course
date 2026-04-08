@@ -10,6 +10,7 @@ import Certificate from './pages/Certificate'
 import Verify from './pages/Verify'
 import ResetPassword from './pages/ResetPassword'
 import Checkout from './pages/Checkout'
+import Cart from './pages/Cart'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -43,6 +44,7 @@ function AppRoutes() {
               <Route path="/course/:courseId/exam" element={<ProtectedRoute><FinalExam /></ProtectedRoute>} />
               <Route path="/certificate/:courseId" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
               <Route path="/checkout/:courseId" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+              <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
             </Routes>
           </>
         } />

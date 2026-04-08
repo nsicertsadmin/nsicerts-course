@@ -54,6 +54,17 @@ export default function Dashboard() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [progress, setProgress] = useState({})
+  const [cart, setCart] = useState(() => {
+    try { return JSON.parse(sessionStorage.getItem('nsi_cart') || '[]') } catch { return [] }
+  })
+
+  const addToCart = (courseId) => {
+    setCart(prev => {
+      const updated = prev.includes(courseId) ? prev : [...prev, courseId]
+      sessionStorage.setItem('nsi_cart', JSON.stringify(updated))
+      return updated
+    })
+  }
 
   useEffect(() => {
     if (!user) return
@@ -83,9 +94,19 @@ export default function Dashboard() {
 
   return (
     <div className="main-content">
-      <div className="dashboard-header">
-        <h1>Welcome back, {firstName} 👋</h1>
-        <p>Continue your safety training and earn your certifications.</p>
+      <div className="dashboard-header" style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap',gap:'1rem'}}>
+        <div>
+          <h1>Welcome back, {firstName} 👋</h1>
+          <p>Continue your safety training and earn your certifications.</p>
+        </div>
+        {cart.length > 0 && (
+          <button
+            onClick={() => navigate('/cart')}
+            style={{background:'var(--navy)',color:'white',border:'none',borderRadius:8,padding:'10px 20px',fontWeight:700,fontSize:'0.9rem',cursor:'pointer',fontFamily:'sans-serif',display:'flex',alignItems:'center',gap:'0.5rem'}}
+          >
+            🛒 Cart ({cart.length}) — Checkout
+          </button>
+        )}
       </div>
 
       <div className="courses-grid">
@@ -131,13 +152,21 @@ export default function Dashboard() {
                       >
                         {completed ? 'Review' : started ? 'Continue →' : 'Start →'}
                       </button>
+                    ) : cart.includes(course.id) ? (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        style={{ background: '#16a34a', color: 'white' }}
+                        onClick={() => navigate('/cart')}
+                      >
+                        ✓ In Cart →
+                      </button>
                     ) : (
                       <button
                         className="btn btn-primary btn-sm"
                         style={{ background: 'var(--gold)', color: 'var(--navy)' }}
-                        onClick={() => navigate(`/checkout/${course.id}`)}
+                        onClick={() => addToCart(course.id)}
                       >
-                        Enroll $39 →
+                        Add to Cart
                       </button>
                     )
                   ) : (
