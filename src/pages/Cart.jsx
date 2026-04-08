@@ -259,10 +259,24 @@ export default function Cart() {
                 <label style={labelStyle}>Card Number</label>
                 <div style={fieldWrap}>
                   <div id="card-number" style={{flex:1,height:22}} />
-                  <div style={{display:'flex',gap:4,paddingRight:4}}>
-                    {['VISA','MC','AMEX'].map(b => (
-                      <div key={b} style={{width:32,height:20,background:'#f1f5f9',borderRadius:3,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'7px',fontWeight:700,color:'#6b7280',fontFamily:'monospace'}}>{b}</div>
-                    ))}
+                  <div style={{display:'flex',gap:6,paddingRight:4,alignItems:'center'}}>
+                    {/* Visa */}
+                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="38" height="24" rx="4" fill="#1A1F71"/>
+                      <text x="19" y="16" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" fontFamily="Arial, sans-serif" letterSpacing="1">VISA</text>
+                    </svg>
+                    {/* Mastercard */}
+                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="38" height="24" rx="4" fill="#252525"/>
+                      <circle cx="14" cy="12" r="7" fill="#EB001B"/>
+                      <circle cx="24" cy="12" r="7" fill="#F79E1B"/>
+                      <path d="M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z" fill="#FF5F00"/>
+                    </svg>
+                    {/* Amex */}
+                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="38" height="24" rx="4" fill="#2557D6"/>
+                      <text x="19" y="16" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="bold" fontFamily="Arial, sans-serif" letterSpacing="0.5">AMEX</text>
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -353,9 +367,7 @@ export default function Cart() {
 
 
 
-            <div style={{textAlign:'center',fontSize:'0.75rem',color:'#6b7280',fontFamily:'sans-serif'}}>
-              Questions? <a href="mailto:NSIcertsadmin@gmail.com" style={{color:'#0B1629',fontWeight:600}}>NSIcertsadmin@gmail.com</a>
-            </div>
+
           </div>
         </div>
       </div>
