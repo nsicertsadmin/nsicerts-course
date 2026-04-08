@@ -12,16 +12,34 @@ export function AuthProvider({ children }) {
       setUser(session?.user ?? null)
       setLoading(false)
     })
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
+
+      // Auto-redirect after email confirmation or password reset
+      if (event === 'SIGNED_IN') {
+        // If on login page or confirm page, go to dashboard
+        const path = window.location.pathname
+        if (path === '/login' || path === '/signup' || path === '/') {
+          window.location.href = '/dashboard'
+        }
+      }
+
+      if (event === 'PASSWORD_RECOVERY') {
+        window.location.href = '/reset-password'
+      }
     })
+
     return () => subscription.unsubscribe()
   }, [])
 
   const signUp = async (email, password, fullName) => {
     const { error } = await supabase.auth.signUp({
       email, password,
-      options: { data: { full_name: fullName } }
+      options: {
+        data: { full_name: fullName },
+        emailRedirectTo: 'https://course.nsicerts.org/dashboard'
+      }
     })
     return { error }
   }
