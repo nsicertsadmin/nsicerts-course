@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import CoursePlayer from './pages/CoursePlayer'
 import FinalExam from './pages/FinalExam'
 import Certificate from './pages/Certificate'
+import Verify from './pages/Verify'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -21,6 +22,9 @@ function AppRoutes() {
   return (
     <div className="app-shell">
       <Routes>
+        {/* Public pages — no topbar, no login required */}
+        <Route path="/verify/:certNumber" element={<Verify />} />
+
         {/* Auth pages — no topbar */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

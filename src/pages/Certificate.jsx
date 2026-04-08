@@ -59,7 +59,7 @@ export default function Certificate() {
   const issuedDate = formatDate(certData.issued_at)
   const expiryDate = formatDate(certData.expires_at)
   const certNum = certData.cert_number
-  const verifyURL = `https://nsicerts.org/verify/${certNum}`
+  const verifyURL = `https://course.nsicerts.org/verify/${certNum}`
   const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(verifyURL)}&color=000000&bgcolor=ffffff&margin=4&ecc=M`
 
   return (
