@@ -258,7 +258,7 @@ export default function Cart() {
               <div style={{marginBottom:'1rem'}}>
                 <label style={labelStyle}>Card Number</label>
                 <div style={fieldWrap}>
-                  <div id="card-number" style={{flex:1,minHeight:20}} />
+                  <div id="card-number" style={{flex:1,height:22}} />
                   <div style={{display:'flex',gap:4,paddingRight:4}}>
                     {['VISA','MC','AMEX'].map(b => (
                       <div key={b} style={{width:32,height:20,background:'#f1f5f9',borderRadius:3,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'7px',fontWeight:700,color:'#6b7280',fontFamily:'monospace'}}>{b}</div>
@@ -270,17 +270,17 @@ export default function Cart() {
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
                 <div>
                   <label style={labelStyle}>Expiration Date</label>
-                  <div style={fieldWrap}><div id="card-date" style={{flex:1,minHeight:20}} /></div>
+                  <div style={fieldWrap}><div id="card-date" style={{flex:1,height:22}} /></div>
                 </div>
                 <div>
                   <label style={labelStyle}>CVV</label>
-                  <div style={fieldWrap}><div id="card-cvv" style={{flex:1,minHeight:20}} /></div>
+                  <div style={fieldWrap}><div id="card-cvv" style={{flex:1,height:22}} /></div>
                 </div>
               </div>
 
               <div style={{marginBottom:'1.5rem'}}>
                 <label style={labelStyle}>Billing ZIP Code</label>
-                <div style={fieldWrap}><div id="card-postal" style={{flex:1,minHeight:20}} /></div>
+                <div style={fieldWrap}><div id="card-postal" style={{flex:1,height:22}} /></div>
               </div>
 
               <button
@@ -327,15 +327,15 @@ export default function Cart() {
             <div style={card}>
               <h3 style={sectionLabel}>What You Get</h3>
               {[
-                ['✅','Instant course access'],
-                ['📜','PDF certificate on completion'],
-                ['🔒','OSHA · ANSI · CSA compliant'],
-                ['🔁','Unlimited quiz retakes'],
-                ['📅','3-year certification validity'],
-                ['📱','Any device, any time'],
+                ['✓','Instant course access'],
+                ['✓','PDF certificate on completion'],
+                ['✓','OSHA · ANSI · CSA compliant'],
+                ['✓','Unlimited quiz retakes'],
+                ['✓','3-year certification validity'],
+                ['✓','Works on any device, any time'],
               ].map(([icon,text]) => (
                 <div key={text} style={{display:'flex',gap:'0.6rem',alignItems:'center',marginBottom:'0.5rem',fontFamily:'sans-serif',fontSize:'0.82rem',color:'#374151'}}>
-                  <span>{icon}</span><span>{text}</span>
+                  <span style={{color:'#16a34a',fontWeight:700}}>{icon}</span><span>{text}</span>
                 </div>
               ))}
             </div>
@@ -351,12 +351,7 @@ export default function Cart() {
               ))}
             </div>
 
-            {/* Guarantee */}
-            <div style={{background:'#f0fdf4',border:'1px solid #bbf7d0',borderRadius:12,padding:'1.25rem',textAlign:'center'}}>
-              <div style={{fontSize:'1.5rem',marginBottom:'0.25rem'}}>💚</div>
-              <div style={{fontWeight:700,fontSize:'0.85rem',color:'#16a34a',fontFamily:'sans-serif'}}>7-Day Satisfaction Guarantee</div>
-              <div style={{fontSize:'0.75rem',color:'#374151',marginTop:'0.25rem',fontFamily:'sans-serif',lineHeight:1.5}}>Not satisfied? Contact us within 7 days for a full refund.</div>
-            </div>
+
 
             <div style={{textAlign:'center',fontSize:'0.75rem',color:'#6b7280',fontFamily:'sans-serif'}}>
               Questions? <a href="mailto:NSIcertsadmin@gmail.com" style={{color:'#0B1629',fontWeight:600}}>NSIcertsadmin@gmail.com</a>
@@ -372,4 +367,4 @@ const pageWrap = { background: '#f1f5f9', minHeight: '100vh', paddingTop: '2rem'
 const card = { background: 'white', borderRadius: 12, border: '1px solid #e2e8f0', padding: '1.5rem', marginBottom: '1.5rem' }
 const sectionLabel = { fontSize: '0.8rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, marginBottom: '1rem', fontFamily: 'sans-serif' }
 const labelStyle = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '0.4rem', fontFamily: 'sans-serif' }
-const fieldWrap = { border: '1.5px solid #d1d5db', borderRadius: 8, padding: '10px 14px', background: '#fff', display: 'flex', alignItems: 'center', minHeight: 46 }
+const fieldWrap = { border: '1.5px solid #d1d5db', borderRadius: 8, padding: '0 14px', background: '#fff', display: 'flex', alignItems: 'center', height: 46, overflow: 'hidden' }
