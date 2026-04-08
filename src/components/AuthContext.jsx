@@ -35,8 +35,15 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut()
   }
 
+  const resetPassword = async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://course.nsicerts.org/reset-password'
+    })
+    return { error }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, resetPassword }}>
       {children}
     </AuthContext.Provider>
   )

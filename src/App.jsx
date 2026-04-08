@@ -8,6 +8,7 @@ import CoursePlayer from './pages/CoursePlayer'
 import FinalExam from './pages/FinalExam'
 import Certificate from './pages/Certificate'
 import Verify from './pages/Verify'
+import ResetPassword from './pages/ResetPassword'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -28,6 +29,7 @@ function AppRoutes() {
         {/* Auth pages — no topbar */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* App pages — with topbar */}
         <Route path="/*" element={
