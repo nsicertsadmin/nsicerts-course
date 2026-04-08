@@ -63,7 +63,7 @@ export default function Dashboard() {
   const loadProgress = async () => {
     const { data } = await supabase
       .from('course_progress')
-      .select('course_id, completed_chapters, passed_final, cert_number')
+      .select('course_id, completed_chapters, passed_final, cert_number, paid')
       .eq('user_id', user.id)
     if (data) {
       const map = {}
@@ -124,12 +124,22 @@ export default function Dashboard() {
                 <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                   <div className="course-meta">{course.duration} · {course.chapters} chapters</div>
                   {course.available ? (
-                    <button
-                      className="btn btn-primary btn-sm"
-                      onClick={() => navigate(`/course/${course.id}`)}
-                    >
-                      {completed ? 'Review' : started ? 'Continue →' : 'Start →'}
-                    </button>
+                    p?.paid ? (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => navigate(`/course/${course.id}`)}
+                      >
+                        {completed ? 'Review' : started ? 'Continue →' : 'Start →'}
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        style={{ background: 'var(--gold)', color: 'var(--navy)' }}
+                        onClick={() => navigate(`/checkout/${course.id}`)}
+                      >
+                        Enroll $39 →
+                      </button>
+                    )
                   ) : (
                     <span className="badge-locked">🔒 Coming Soon</span>
                   )}
