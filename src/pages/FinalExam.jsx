@@ -63,7 +63,7 @@ export default function FinalExam() {
   const generateCertNumber = () => {
     const year = new Date().getFullYear()
     const rand = Math.floor(Math.random() * 900000) + 100000
-    return `NSI${year}${rand}`
+    return `NSI-${year}-${rand}`
   }
 
   const handleRetry = () => {

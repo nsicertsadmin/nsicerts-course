@@ -131,7 +131,7 @@ export default function Verify() {
           </div>
           <div style={styles.detailBox}>
             <div style={styles.detailLabel}>CERTIFICATE NUMBER</div>
-            <div style={{ ...styles.detailValue, fontFamily: 'monospace', color: '#0A1F44', fontWeight: 700 }}>{cert.cert_number}</div>
+            <div style={{ ...styles.detailValue, fontFamily: "'DM Mono', 'Courier New', monospace", color: '#0A1F44', fontWeight: 700, fontSize: '1rem', letterSpacing: '0.5px' }}>{cert.cert_number}</div>
           </div>
           <div style={styles.detailBox}>
             <div style={styles.detailLabel}>ISSUED</div>

@@ -154,10 +154,10 @@ export default function Certificate() {
               {[
                 { val: issuedDate, label: 'Issue Date' },
                 { val: expiryDate, label: 'Expiration Date' },
-                { val: certNum, label: 'Certification Number' },
+                { val: certNum, label: 'Certification Number', mono: true },
               ].map(f => (
                 <div key={f.label} style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1rem', fontWeight: 600, borderBottom: '1px solid #333', paddingBottom: '0.2rem', minWidth: 150 }}>{f.val}</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 600, borderBottom: '1px solid #333', paddingBottom: '0.2rem', minWidth: 150, fontFamily: f.mono ? 'DM Mono, Courier New, monospace' : 'inherit' }}>{f.val}</div>
                   <div style={{ fontSize: '0.65rem', color: '#888', marginTop: '0.2rem' }}>{f.label}</div>
                 </div>
               ))}
@@ -244,7 +244,7 @@ export default function Certificate() {
                     <div style={{ color: '#0A1F44', fontSize: '0.55rem' }}>TRAINING CENTER</div>
                     <div style={{ color: '#0A1F44', fontSize: '0.6rem', marginBottom: '0.4rem' }}>NSICerts.org</div>
 
-                    <div style={{ borderBottom: '1px solid #0A1F44', paddingBottom: '0.1rem', color: '#0A1F44', fontSize: '0.65rem' }}>{certNum}</div>
+                    <div style={{ borderBottom: '1px solid #0A1F44', paddingBottom: '0.1rem', color: '#0A1F44', fontSize: '0.65rem', fontFamily: "'DM Mono', 'Courier New', monospace" }}>{certNum}</div>
                     <div style={{ fontSize: '0.55rem', color: '#0A1F44', marginBottom: '0.4rem' }}>CERTIFICATION NUMBER</div>
 
                     <div style={{ borderTop: '1px solid #0A1F44', paddingTop: '0.3rem' }}>
@@ -281,7 +281,7 @@ export default function Certificate() {
           {/* Cert details card */}
           <div className="card" style={{ marginTop: '1.5rem', textAlign: 'center' }}>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', flexWrap: 'wrap' }}>
-              <div><div style={{ fontSize: '0.7rem', color: 'var(--gray-400)', marginBottom: '0.2rem' }}>CERTIFICATE NUMBER</div><strong style={{ color: 'var(--navy)', fontSize: '1.1rem' }}>{certNum}</strong></div>
+              <div><div style={{ fontSize: '0.7rem', color: 'var(--gray-400)', marginBottom: '0.2rem' }}>CERTIFICATE NUMBER</div><strong style={{ color: 'var(--navy)', fontSize: '1.1rem', fontFamily: "'DM Mono', 'Courier New', monospace" }}>{certNum}</strong></div>
               <div><div style={{ fontSize: '0.7rem', color: 'var(--gray-400)', marginBottom: '0.2rem' }}>ISSUED</div><strong>{issuedDate}</strong></div>
               <div><div style={{ fontSize: '0.7rem', color: 'var(--gray-400)', marginBottom: '0.2rem' }}>EXPIRES</div><strong>{expiryDate}</strong></div>
               <div><div style={{ fontSize: '0.7rem', color: 'var(--gray-400)', marginBottom: '0.2rem' }}>EXAM SCORE</div><strong style={{ color: 'var(--green)' }}>{certData.score}%</strong></div>
