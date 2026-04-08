@@ -50,11 +50,12 @@ export default function FinalExam() {
         cert_number: certNum, cert_issued_at: new Date().toISOString(),
         exam_score: pct, updated_at: new Date().toISOString()
       }, { onConflict: 'user_id,course_id' })
+      const holderName = user?.user_metadata?.full_name || user?.email || ''
       await supabase.from('certifications').upsert({
         user_id: user.id, course_id: courseId, cert_number: certNum,
         issued_at: new Date().toISOString(),
         expires_at: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-        score: pct
+        score: pct, holder_name: holderName
       }, { onConflict: 'user_id,course_id' })
     }
   }

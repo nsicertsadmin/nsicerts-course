@@ -42,14 +42,8 @@ export default function Verify() {
 
     setCert(data)
 
-    // Load profile name
-    const { data: profileData } = await supabase
-      .from('profiles')
-      .select('full_name, email')
-      .eq('id', data.user_id)
-      .single()
-
-    setProfile(profileData)
+    // holder_name is stored directly on certifications table
+    setProfile({ full_name: data.holder_name || null })
     setLoading(false)
   }
 
