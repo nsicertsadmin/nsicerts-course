@@ -11,6 +11,7 @@ import Verify from './pages/Verify'
 import ResetPassword from './pages/ResetPassword'
 import Checkout from './pages/Checkout'
 import Cart from './pages/Cart'
+import Admin from './pages/Admin'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -45,6 +46,7 @@ function AppRoutes() {
               <Route path="/certificate/:courseId" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
               <Route path="/checkout/:courseId" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
               <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
             </Routes>
           </>
         } />
