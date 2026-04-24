@@ -33,10 +33,11 @@ export default function Cart() {
   const subtotal = cart.reduce((sum, id) => sum + (ALL_COURSES[id]?.price || 0), 0)
   const discount = promoApplied ? Math.round(subtotal * (promoApplied.discount_pct / 100)) : 0
   const total = subtotal - discount
+  const isFree = total === 0
 
   useEffect(() => {
-    if (cart.length > 0) loadCloverSDK()
-  }, [cart])
+    if (cart.length > 0 && !isFree) loadCloverSDK()
+  }, [cart, isFree])
 
   useEffect(() => {
     sessionStorage.setItem('nsi_cart', JSON.stringify(cart))
@@ -70,6 +71,12 @@ export default function Cart() {
       return
     }
 
+    // Check max uses
+    if (data.max_uses && data.use_count >= data.max_uses) {
+      setPromoError('This promo code has reached its maximum uses.')
+      return
+    }
+
     setPromoApplied(data)
   }
 
@@ -90,7 +97,6 @@ export default function Cart() {
   }
 
   const initClover = () => {
-    // Wait for DOM to be ready
     setTimeout(() => {
       try {
         const clover = new window.Clover(PUBLIC_TOKEN, { merchantId: MID })
@@ -111,10 +117,40 @@ export default function Cart() {
     }, 400)
   }
 
+  const enrollCourses = async () => {
+    for (const courseId of cart) {
+      await supabase.from('course_progress').upsert({
+        user_id: user.id, course_id: courseId,
+        paid: true, paid_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,course_id' })
+    }
+    if (promoApplied) {
+      await supabase.from('promo_codes')
+        .update({ use_count: (promoApplied.use_count || 0) + 1 })
+        .eq('id', promoApplied.id)
+    }
+    sessionStorage.removeItem('nsi_cart')
+    navigate('/dashboard?enrolled=true')
+  }
+
   const handlePay = async () => {
-    if (!cloverRef.current || processing || cart.length === 0) return
+    if (processing || cart.length === 0) return
     setProcessing(true)
     setError('')
+
+    // FREE ORDER — skip payment entirely
+    if (isFree) {
+      await enrollCourses()
+      return
+    }
+
+    // PAID ORDER
+    if (!cloverRef.current) {
+      setError('Payment form not ready. Please refresh.')
+      setProcessing(false)
+      return
+    }
 
     try {
       const result = await cloverRef.current.createToken()
@@ -145,18 +181,7 @@ export default function Cart() {
         return
       }
 
-      // Mark all courses as paid in Supabase
-      for (const courseId of cart) {
-        await supabase.from('course_progress').upsert({
-          user_id: user.id, course_id: courseId,
-          paid: true, paid_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'user_id,course_id' })
-      }
-
-      // Clear cart
-      sessionStorage.removeItem('nsi_cart')
-      navigate('/dashboard?enrolled=true')
+      await enrollCourses()
 
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
@@ -245,80 +270,93 @@ export default function Cart() {
               </div>
             </div>
 
-            {/* Payment form */}
-            <div style={card}>
-              <h3 style={sectionLabel}>Payment Information</h3>
-
-              {(error || sdkError) && (
-                <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:8,padding:'0.75rem 1rem',marginBottom:'1rem',color:'#dc2626',fontSize:'0.85rem',fontFamily:'sans-serif'}}>
-                  ⚠️ {error || sdkError}
+            {/* Payment form — only show if not free */}
+            {isFree ? (
+              <div style={card}>
+                <div style={{textAlign:'center',padding:'1rem 0'}}>
+                  <div style={{fontSize:'2.5rem',marginBottom:'0.75rem'}}>🎉</div>
+                  <h3 style={{color:'#16a34a',fontFamily:'sans-serif',marginBottom:'0.5rem'}}>100% Off — No Payment Required!</h3>
+                  <p style={{color:'#6b7280',fontFamily:'sans-serif',fontSize:'0.9rem',marginBottom:'1.5rem'}}>Your promo code covers the full cost. Click below to enroll instantly.</p>
+                  <button
+                    onClick={handlePay}
+                    disabled={processing}
+                    style={{width:'100%',padding:'14px',background:processing?'#9ca3af':'#16a34a',color:'white',border:'none',borderRadius:8,fontSize:'1rem',fontWeight:700,cursor:processing?'not-allowed':'pointer',fontFamily:'sans-serif'}}
+                  >
+                    {processing ? '⏳ Enrolling...' : '✅ Enroll Free — No Payment Required'}
+                  </button>
                 </div>
-              )}
+              </div>
+            ) : (
+              <div style={card}>
+                <h3 style={sectionLabel}>Payment Information</h3>
 
-              <div style={{marginBottom:'1rem'}}>
-                <label style={labelStyle}>Card Number</label>
-                <div style={fieldWrap}>
-                  <div id="card-number" style={{flex:1,height:22}} />
-                  <div style={{display:'flex',gap:6,paddingRight:4,alignItems:'center'}}>
-                    {/* Visa */}
-                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="38" height="24" rx="4" fill="#1A1F71"/>
-                      <text x="19" y="16" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" fontFamily="Arial, sans-serif" letterSpacing="1">VISA</text>
-                    </svg>
-                    {/* Mastercard */}
-                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="38" height="24" rx="4" fill="#252525"/>
-                      <circle cx="14" cy="12" r="7" fill="#EB001B"/>
-                      <circle cx="24" cy="12" r="7" fill="#F79E1B"/>
-                      <path d="M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z" fill="#FF5F00"/>
-                    </svg>
-                    {/* Amex */}
-                    <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="38" height="24" rx="4" fill="#2557D6"/>
-                      <text x="19" y="16" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="bold" fontFamily="Arial, sans-serif" letterSpacing="0.5">AMEX</text>
-                    </svg>
+                {(error || sdkError) && (
+                  <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:8,padding:'0.75rem 1rem',marginBottom:'1rem',color:'#dc2626',fontSize:'0.85rem',fontFamily:'sans-serif'}}>
+                    ⚠️ {error || sdkError}
+                  </div>
+                )}
+
+                <div style={{marginBottom:'1rem'}}>
+                  <label style={labelStyle}>Card Number</label>
+                  <div style={fieldWrap}>
+                    <div id="card-number" style={{flex:1,height:22}} />
+                    <div style={{display:'flex',gap:6,paddingRight:4,alignItems:'center'}}>
+                      <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="38" height="24" rx="4" fill="#1A1F71"/>
+                        <text x="19" y="16" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" fontFamily="Arial, sans-serif" letterSpacing="1">VISA</text>
+                      </svg>
+                      <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="38" height="24" rx="4" fill="#252525"/>
+                        <circle cx="14" cy="12" r="7" fill="#EB001B"/>
+                        <circle cx="24" cy="12" r="7" fill="#F79E1B"/>
+                        <path d="M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z" fill="#FF5F00"/>
+                      </svg>
+                      <svg width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="38" height="24" rx="4" fill="#2557D6"/>
+                        <text x="19" y="16" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="bold" fontFamily="Arial, sans-serif" letterSpacing="0.5">AMEX</text>
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
-                <div>
-                  <label style={labelStyle}>Expiration Date</label>
-                  <div style={fieldWrap}><div id="card-date" style={{flex:1,height:22}} /></div>
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
+                  <div>
+                    <label style={labelStyle}>Expiration Date</label>
+                    <div style={fieldWrap}><div id="card-date" style={{flex:1,height:22}} /></div>
+                  </div>
+                  <div>
+                    <label style={labelStyle}>CVV</label>
+                    <div style={fieldWrap}><div id="card-cvv" style={{flex:1,height:22}} /></div>
+                  </div>
                 </div>
-                <div>
-                  <label style={labelStyle}>CVV</label>
-                  <div style={fieldWrap}><div id="card-cvv" style={{flex:1,height:22}} /></div>
+
+                <div style={{marginBottom:'1.5rem'}}>
+                  <label style={labelStyle}>Billing ZIP Code</label>
+                  <div style={fieldWrap}><div id="card-postal" style={{flex:1,height:22}} /></div>
+                </div>
+
+                <button
+                  onClick={handlePay}
+                  disabled={processing || !sdkReady}
+                  style={{width:'100%',padding:'14px',background:processing?'#9ca3af':'#0B1629',color:'white',border:'none',borderRadius:8,fontSize:'1rem',fontWeight:700,cursor:processing?'not-allowed':'pointer',fontFamily:'sans-serif',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5rem'}}
+                >
+                  {processing ? '⏳ Processing...' : `🔒 Pay $${total}.00 — Enroll Now`}
+                </button>
+
+                <div style={{marginTop:'1rem',textAlign:'center',fontSize:'0.75rem',color:'#9ca3af',fontFamily:'sans-serif',lineHeight:1.5}}>
+                  Secured by Clover · Card details encrypted · Never stored on our servers
                 </div>
               </div>
-
-              <div style={{marginBottom:'1.5rem'}}>
-                <label style={labelStyle}>Billing ZIP Code</label>
-                <div style={fieldWrap}><div id="card-postal" style={{flex:1,height:22}} /></div>
-              </div>
-
-              <button
-                onClick={handlePay}
-                disabled={processing || !sdkReady}
-                style={{width:'100%',padding:'14px',background:processing?'#9ca3af':'#0B1629',color:'white',border:'none',borderRadius:8,fontSize:'1rem',fontWeight:700,cursor:processing?'not-allowed':'pointer',fontFamily:'sans-serif',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5rem'}}
-              >
-                {processing ? '⏳ Processing...' : `🔒 Pay $${total}.00 — Enroll Now`}
-              </button>
-
-              <div style={{marginTop:'1rem',textAlign:'center',fontSize:'0.75rem',color:'#9ca3af',fontFamily:'sans-serif',lineHeight:1.5}}>
-                Secured by Clover · Card details encrypted · Never stored on our servers
-              </div>
-            </div>
+            )}
 
             <button onClick={() => navigate('/dashboard')} style={{background:'none',border:'none',color:'#6b7280',cursor:'pointer',fontSize:'0.85rem',fontFamily:'sans-serif',marginTop:'0.5rem'}}>
               ← Back to Dashboard
             </button>
           </div>
 
-          {/* RIGHT — Order summary + trust */}
+          {/* RIGHT */}
           <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
 
-            {/* Price breakdown */}
             <div style={card}>
               <h3 style={sectionLabel}>Order Summary</h3>
               <div style={{display:'flex',justifyContent:'space-between',marginBottom:'0.5rem',fontFamily:'sans-serif',fontSize:'0.9rem'}}>
@@ -333,11 +371,10 @@ export default function Cart() {
               )}
               <div style={{borderTop:'1px solid #e2e8f0',marginTop:'0.75rem',paddingTop:'0.75rem',display:'flex',justifyContent:'space-between',fontFamily:'sans-serif'}}>
                 <span style={{fontWeight:700,color:'#0B1629'}}>Total</span>
-                <span style={{fontWeight:800,fontSize:'1.2rem',color:'#0B1629'}}>${total}.00</span>
+                <span style={{fontWeight:800,fontSize:'1.2rem',color: isFree ? '#16a34a' : '#0B1629'}}>{isFree ? 'FREE' : `$${total}.00`}</span>
               </div>
             </div>
 
-            {/* What you get */}
             <div style={card}>
               <h3 style={sectionLabel}>What You Get</h3>
               {[
@@ -354,7 +391,6 @@ export default function Cart() {
               ))}
             </div>
 
-            {/* Compliance */}
             <div style={{background:'#0B1629',borderRadius:12,padding:'1.25rem'}}>
               <h3 style={{fontSize:'0.75rem',fontWeight:700,color:'rgba(255,255,255,0.5)',textTransform:'uppercase',letterSpacing:1,marginBottom:'0.75rem',fontFamily:'sans-serif'}}>Compliance Standards</h3>
               {[['OSHA','29 CFR 1926.453','#ef4444'],['ANSI','A92.22 & A92.24','#F5A623'],['CSA','B354.6:17','#22c55e']].map(([label,sub,color]) => (
@@ -364,9 +400,6 @@ export default function Cart() {
                 </div>
               ))}
             </div>
-
-
-
 
           </div>
         </div>
