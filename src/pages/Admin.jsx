@@ -95,7 +95,7 @@ export default function Admin() {
       code: promoForm.code.toUpperCase().trim(),
       discount_pct: parseInt(promoForm.discount_pct),
       description: promoForm.description || null,
-      expires_at: promoForm.expires_at || null,
+      expires_at: promoForm.expires_at ? promoForm.expires_at + 'T12:00:00' : null,
       active: true,
     })
     setPromoSaving(false)
