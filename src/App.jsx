@@ -12,6 +12,7 @@ import ResetPassword from './pages/ResetPassword'
 import Checkout from './pages/Checkout'
 import Cart from './pages/Cart'
 import Admin from './pages/Admin'
+import Business from './pages/Business'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -38,16 +39,21 @@ function AppRoutes() {
         <Route path="/*" element={
           <>
             <Topbar />
-            <Routes>
-              <Route path="/" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/course/:courseId" element={<ProtectedRoute><CoursePlayer /></ProtectedRoute>} />
-              <Route path="/course/:courseId/exam" element={<ProtectedRoute><FinalExam /></ProtectedRoute>} />
-              <Route path="/certificate/:courseId" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
-              <Route path="/checkout/:courseId" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-              <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
-              <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-            </Routes>
+<Routes>
+  <Route path="/" element={<Navigate to={user ? '/dashboard' : '/login'} replace />} />
+  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+  <Route path="/course/:courseId" element={<ProtectedRoute><CoursePlayer /></ProtectedRoute>} />
+  <Route path="/course/:courseId/exam" element={<ProtectedRoute><FinalExam /></ProtectedRoute>} />
+  <Route path="/certificate/:courseId" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
+  <Route path="/checkout/:courseId" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+  <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+  <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+  <Route path="/business" element={<ProtectedRoute><Business /></ProtectedRoute>} />
+  <Route path="/verify/:certNumber" element={<Verify />} />
+  <Route path="/reset-password" element={<ResetPassword />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/signup" element={<Signup />} />
+</Routes>
           </>
         } />
       </Routes>
